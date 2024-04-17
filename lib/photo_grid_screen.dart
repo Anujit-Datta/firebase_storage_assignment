@@ -87,7 +87,7 @@ class _PhotoGridState extends State<PhotoGridScreen> {
   }
 
   uploadImage()async{
-    // fetchingInProgress=true;
+    EasyLoading.show(status: 'Uploading image...');
     setState(() {});
     if(_pickedImage==null){
       EasyLoading.showToast('Please pick an image first.',toastPosition: EasyLoadingToastPosition.bottom);
@@ -96,9 +96,10 @@ class _PhotoGridState extends State<PhotoGridScreen> {
     await FirebaseStorage.instance.ref().child('photogrid/${imageUrls.length+1}').putFile(File(_pickedImage!.path)).then((value) async{
       String url=await value.ref.getDownloadURL();
       imageUrls.add(url);
-      // fetchingInProgress=false;
+
       setState(() {});
       EasyLoading.showToast('Image uploaded successfully.',toastPosition: EasyLoadingToastPosition.bottom);
     });
+    EasyLoading.dismiss();
   }
 }
